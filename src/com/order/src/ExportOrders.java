@@ -38,6 +38,7 @@ public class ExportOrders {
 	/**
 	 * @param args
 	 */
+	@SuppressWarnings("static-access")
 	public static void main(String[] args) {
 		ExportOrders exportOrders = new ExportOrders();
 		database = args[0];
