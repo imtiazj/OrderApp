@@ -41,7 +41,7 @@ public class ExportOrders {
 	@SuppressWarnings("static-access")
 	public static void main(String[] args) {
 		ExportOrders exportOrders = new ExportOrders();
-		database = args[0];
+		database = args[0]; 
 		database = args[1];
 		
 		exportOrders.database = args[0];
