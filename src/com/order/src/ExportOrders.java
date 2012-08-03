@@ -27,7 +27,7 @@ import com.order.src.objects.Header;
 public class ExportOrders {
 
 	private static String database = ""; //$NON-NLS-1$
-	private static String database2 = ""; //$NON-NLS-1$ 
+	private static String database2 = ""; //$NON-NLS-1$
 	
 	private static final String I2I = "I2I";
 	private static final String TOR = "TOR";
