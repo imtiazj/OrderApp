@@ -21,10 +21,8 @@ public class ReadOrders {
 		try {
 			ordsDoc = OrdersDocument.Factory.parse(xmlFile);
 		} catch (XmlException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

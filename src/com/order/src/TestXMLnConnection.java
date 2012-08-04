@@ -64,7 +64,6 @@ public class TestXMLnConnection {
 		try {
 			ordsDoc.save(new File("c:/test.xml"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		*/
@@ -85,7 +84,6 @@ public class TestXMLnConnection {
 			Connection con = conman.getConnection();
 			conman.testConnection(con, sql);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

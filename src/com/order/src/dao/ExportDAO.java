@@ -20,7 +20,6 @@ public class ExportDAO {
 
 	public ExportDAO(String database) {
 		this.database = database;
-		// TODO Auto-generated constructor stub
 	}
 
 	public ExportDAO(String database, String database2) {
@@ -28,7 +27,6 @@ public class ExportDAO {
 		this.database = database;
 		// bev database
 		this.database2 = database2;
-		// TODO Auto-generated constructor stub
 	}
 
 	public Connection getConn() throws SQLException {

@@ -259,7 +259,6 @@ public class ExportOrders {
 			ordsDoc_TOR.save(new File(Messages.getString("directory") + filename1), option); //$NON-NLS-1$
 			ordsDoc_I2I.save(new File(Messages.getString("directory") + filename2), option); //$NON-NLS-1$
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
@@ -301,10 +300,8 @@ public class ExportOrders {
 				System.out.println("Complete"); //$NON-NLS-1$
 
 			} catch (SocketException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 //		}
@@ -360,7 +357,6 @@ public class ExportOrders {
 			soldTo = dao.getSoldToInformation(number);
 			return soldTo;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -376,7 +372,6 @@ public class ExportOrders {
 			shipTo = dao.getShipToInformation(number);
 			return shipTo;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -392,7 +387,6 @@ public class ExportOrders {
 			headers = dao.getHeaderInformation();
 			return headers;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -407,7 +401,6 @@ public class ExportOrders {
 			lines = dao.getDetailLineInformation(number);
 			return lines;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
