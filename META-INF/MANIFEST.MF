@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Created-By: 1.5.0_10 (Sun Microsystems Inc.)
+Main-Class: com.order.src.ExportOrders
+Class-Path: ibis_orders.jar jsr173_1.0_api.jar resolver.jar xbean.jar xbean_xpath.jar xmlbeans-qname.jar xmlpublic.jar commons-net-1.4.1.jar
