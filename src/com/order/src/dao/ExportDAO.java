@@ -52,11 +52,11 @@ public class ExportDAO {
 
 		while (rs.next()) {
 			Header header = new Header();
-			header.setNo(rs.getString("number"));
+			header.setNo(rs.getString("number"));			//number
 			header.setComment(getComments(header.getNo()));
 			header.setContact("");
 			header.setInvoice("");
-			header.setNumber(rs.getString("custno"));
+			header.setNumber(rs.getString("custno"));	//ref_no
 			header.setPoNo(rs.getString("custpono"));
 			header.setRefNo("");
 			header.setService("");
@@ -178,91 +178,23 @@ public class ExportDAO {
 		return shipTo;
 	}
 	
-	// public Vector<Header> getHeaderInformation() throws SQLException {
-	// String sql = "SELECT h.number number, h.cust_no custno, h.cust_po_no
-	// custpono, a.addr_type addrtype, "
-	// + "a.name name, a.bvaddr1 addr1, a.bvaddr2 addr2, a.bvcity city,
-	// a.ship_desc shipdesc, "
-	// + "a.bvprovstate prov, a.bvcountrycode country, a.bvpostalcode
-	// postalcode, a.bvcocontact1name cname, "
-	// + "a.bvaddrtelno1 tel1, a.bvaddrtelno2 tel2, a.bvaddremail email "
-	// + "FROM sales_order_header h "
-	// + "LEFT JOIN order_address a "
-	// + "ON h.bvaddr_cev_no = a.cev_no "
-	// + "WHERE h.number in (select distinct number from sales_order_detail
-	// WHERE bvordqty >= 0) AND h.status = 'O' "
-	// + "AND a.addr_type = 'B' " + "ORDER BY h.number, a.addr_type";
-	//
-	// Statement stmt = getConn().createStatement();
-	// ResultSet rs = stmt.executeQuery(sql);
-	//
-	// Vector<Header> headers = new Vector<Header>();
-	//
-	// while (rs.next()) {
-	// Header header = new Header();
-	// header.setNo(rs.getString("number"));
-	// header.setComment("");
-	// header.setContact("");
-	// header.setInvoice("");
-	// header.setNumber(rs.getString("custno"));
-	// header.setPoNo(rs.getString("custpono"));
-	// header.setRefNo("");
-	// header.setService("");
-	// header.setShipVia(rs.getString("shipdesc"));
-	// header.setShipOn("");
-	//
-	// SoldTo soldTo = new SoldTo();
-	// soldTo.setAddress1(rs.getString("addr1"));
-	// soldTo.setAddress2(rs.getString("addr2"));
-	// soldTo.setCity(rs.getString("city"));
-	// soldTo.setCode(rs.getString("addrtype"));
-	// soldTo.setContact(rs.getString("cname"));
-	// soldTo.setCountry(rs.getString("country"));
-	// soldTo.setEmail(rs.getString("email"));
-	// soldTo.setFax(rs.getString("tel2"));
-	// soldTo.setName(rs.getString("name"));
-	// soldTo.setPhone(rs.getString("tel1"));
-	// soldTo.setPostal(rs.getString("postalcode"));
-	// soldTo.setProvince(rs.getString("prov"));
-	//
-	// header.setSoldTo(soldTo);
-	//
-	// headers.add(header);
-	// }
-	//
-	// return headers;
-	// }
-	
-	// public Vector<com.order.src.objects.Line> getDetailLineInformation(String
-	// number)
-	// throws SQLException {
-	// String sql = "SELECT number number, recno recno, code item, serial_no
-	// serial, ordd_description description, bvordqty qty, comment comment "
-	// + "FROM sales_order_detail "
-	// + "WHERE code <> '' AND bvordqty > 0 "
-	// + "AND number like '%" + number.trim() + "%'";
-	//
-	// Statement stmt = getConn().createStatement();
-	// ResultSet rs = stmt.executeQuery(sql);
-	//
-	// Vector<com.order.src.objects.Line> lines = new
-	// Vector<com.order.src.objects.Line>();
-	//		
-	// while (rs.next()){
-	// com.order.src.objects.Line line = new com.order.src.objects.Line();
-	// line.setComment(rs.getString("comment"));
-	// line.setDescription(rs.getString("description"));
-	// line.setItem(rs.getString("item"));
-	// line.setLot("");
-	// line.setNo(rs.getString("recno"));
-	// line.setQty(rs.getInt("qty"));
-	// line.setComment(rs.getString("comment"));
-	// line.setSerial(rs.getString("serial"));
-	//			
-	// lines.add(line);
-	//			
-	// }
-	//
-	// return lines;
-	// }
+	/*
+		--WALMART ADDRESS QUERY
+		SELECT order_no number, ord_sequence recno, ord_part_no item, ord_description description, 
+		bvcmtdqty qty, comment comment, ord_part_whse warehouse 
+		FROM bve_order_dtl
+		WHERE 1=1 
+		AND order_no like '%00042239-0%'
+		AND recno = 1;
+		
+		--WALMART DETAILS QUERY
+		SELECT order_no number, ord_sequence recno, ord_part_no item, ord_description description, 
+		bvcmtdqty qty, comment comment, ord_part_whse warehouse 
+		FROM bve_order_dtl 
+		WHERE 1=1 
+		AND ord_part_no <> '' 
+		AND bvcmtdqty > 0
+		AND recno <> 1
+		AND order_no like '%00042239-0%';
+	*/
 }
