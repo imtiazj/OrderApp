@@ -249,8 +249,8 @@ public class ExportOrders {
 		filename2 = "ORD"+ I2I + "_" + dateFormat.format(date) + "_orders.xml"; //$NON-NLS-1$ //$NON-NLS-2$
 
 		// System.out.println(ordsDoc.toString());
-		System.out.println("XML Generated is Valid: " + ordsDoc_TOR.validate()); //$NON-NLS-1$
-		System.out.println("XML Generated is Valid: " + ordsDoc_I2I.validate()); //$NON-NLS-1$
+		System.out.println("XML Generated is Valid TOR: " + ordsDoc_TOR.validate()); //$NON-NLS-1$
+		System.out.println("XML Generated is Valid I2I: " + ordsDoc_I2I.validate()); //$NON-NLS-1$
 		System.out.println("Writing to File: " + Messages.getString("directory") + filename1); //$NON-NLS-1$
 		System.out.println("Writing to File: " + Messages.getString("directory") + filename2); //$NON-NLS-1$
 		XmlOptions option = new XmlOptions();

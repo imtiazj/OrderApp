@@ -42,8 +42,8 @@ public class ExportDAO {
 		String sql = "SELECT h.order_no number, h.cust_no custno, h.cust_po_no custpono "
 				+ "FROM bve_order h "
 				+ "WHERE h.order_no in (select distinct order_no from bve_order_dtl WHERE bvcmtdqty > 0) "
-						//+ "AND (h.ord_status = 'O' OR h.ord_status = 'C') "
 						+ "AND h.ord_status = 'C' "
+						//+ "AND (h.ord_status = 'C' OR h.cust_no = 'WALMART.CA') "						//this line gets any walmart data... remove this once the data is okay
 				+ "ORDER BY h.order_no";
 		Statement stmt = getConn2().createStatement();
 		ResultSet rs = stmt.executeQuery(sql);
@@ -170,13 +170,20 @@ public class ExportDAO {
 				+ "AND a.addr_type = 'S'";
 		}
 
-		Statement stmt = getConn().createStatement();
+		Statement stmt = null;
+		if ("WALMART.CA".equalsIgnoreCase(custno.trim())){
+			stmt = getConn2().createStatement();
+		}else{
+			stmt = getConn().createStatement();
+		}
 		ResultSet rs = stmt.executeQuery(sql);
 
 		com.order.src.objects.ShipTo shipTo = new com.order.src.objects.ShipTo();
 		String shipToString = "";
 		if ("WALMART.CA".equalsIgnoreCase(custno.trim())){
-			shipToString = rs.getString("comment");
+			while (rs.next()){
+				shipToString = rs.getString("comment");
+			}
 		}else{
 			while (rs.next()){
 				shipTo.setAddress1(rs.getString("addr1"));
@@ -196,7 +203,48 @@ public class ExportDAO {
 		
 		if ("WALMART.CA".equalsIgnoreCase(custno.trim())){
 			String[] shipToArray = shipToString.split(","); 
-			//TODO Populate shipTo object
+			shipTo.setName("");
+			shipTo.setAddress1("");
+			shipTo.setAddress2("");
+			shipTo.setCity("");
+			shipTo.setProvince("");
+			shipTo.setPostal("");
+			shipTo.setCountry("");
+			
+			//   0          1           2        3       4            5           6
+			//<Contact>,<Address1>,<Address2>,<City>,<Province>,<Postal Code>,<Country>
+			if (shipToArray.length > 0){
+				shipTo.setName(shipToArray[0]);	
+			}			
+			if (shipToArray.length > 1){
+				shipTo.setAddress1(shipToArray[1]);
+			}
+			if (shipToArray.length > 2){
+				shipTo.setAddress2(shipToArray[2]);
+			}
+			if (shipToArray.length > 3){
+				shipTo.setCity(shipToArray[3]);
+			}
+			if (shipToArray.length > 4){
+				shipTo.setProvince(shipToArray[4]);
+			}
+			if (shipToArray.length > 5){
+				shipTo.setPostal(shipToArray[5]);
+			}
+			if (shipToArray.length > 6){
+				if ("CA".equals(shipToArray[6])){
+					shipTo.setCountry("CDN");
+				}else{
+					shipTo.setCountry(shipToArray[6]);
+				}
+			}
+			shipTo.setCode("S");		//address type 'S' for ship
+			shipTo.setContact(" ");		//blank, not provided
+			shipTo.setEmail(" ");		//blank, not provided
+			shipTo.setFax(" ");			//blank, not provided
+			shipTo.setPhone(" ");		//blank, not provided
+			
+			
 		}
 
 		return shipTo;
