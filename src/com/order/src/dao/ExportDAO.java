@@ -203,13 +203,13 @@ public class ExportDAO {
 		
 		if ("WALMART.CA".equalsIgnoreCase(custno.trim())){
 			String[] shipToArray = shipToString.split(","); 
-			shipTo.setName("");
-			shipTo.setAddress1("");
-			shipTo.setAddress2("");
-			shipTo.setCity("");
-			shipTo.setProvince("");
-			shipTo.setPostal("");
-			shipTo.setCountry("");
+			shipTo.setName(" ");
+			shipTo.setAddress1(" ");
+			shipTo.setAddress2(" ");
+			shipTo.setCity(" ");
+			shipTo.setProvince(" ");
+			shipTo.setPostal(" ");
+			shipTo.setCountry(" ");
 			
 			//   0          1           2        3       4            5           6
 			//<Contact>,<Address1>,<Address2>,<City>,<Province>,<Postal Code>,<Country>
