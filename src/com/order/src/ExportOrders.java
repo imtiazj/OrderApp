@@ -147,7 +147,7 @@ public class ExportOrders {
 				}
 			}
 			
-			com.order.src.objects.ShipTo headerShipTo = getShipTo(header.getNo());
+			com.order.src.objects.ShipTo headerShipTo = getShipTo(header.getNo(), header.getNumber());
 			// SoldTo Element
 			if (headerShipTo != null) {
 				Shipto shipTo = xHeader.addNewShipto();
@@ -364,12 +364,12 @@ public class ExportOrders {
 		
 	}
 	
-	private com.order.src.objects.ShipTo getShipTo(String number){
+	private com.order.src.objects.ShipTo getShipTo(String number, String custno){
 		ExportDAO dao = new ExportDAO(database, database2);
 		com.order.src.objects.ShipTo shipTo;
 
 		try {
-			shipTo = dao.getShipToInformation(number);
+			shipTo = dao.getShipToInformation(number, custno);
 			return shipTo;
 		} catch (SQLException e) {
 			e.printStackTrace();

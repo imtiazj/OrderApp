@@ -146,46 +146,71 @@ public class ExportDAO {
 	}
 
 	// gets shipto to information from the atlantia database
-	public com.order.src.objects.ShipTo getShipToInformation(String number) throws SQLException {
-		String sql = "SELECT a.addr_type addrtype, a.name name, a.bvaddr1 addr1, a.bvaddr2 addr2, a.bvcity city, a.ship_desc shipdesc, "
-			+ "a.bvprovstate prov, a.bvcountrycode country, a.bvpostalcode postalcode, a.bvcocontact1name cname, "
-			+ "a.bvaddrtelno1 tel1, a.bvaddrtelno2 tel2, a.bvaddremail email "
-			+ "FROM order_address a "
-			+ "WHERE a.cev_no = '" + number.trim() + "' "
-			+ "AND a.addr_type = 'S'";
+	/**
+	 * 
+	 * @param number (h.order_no number, number in xml) 
+	 * @param custno (h.cust_no custno, ref_no in xml)
+	 * @return
+	 * @throws SQLException
+	 */
+	public com.order.src.objects.ShipTo getShipToInformation(String number, String custno) throws SQLException {
+		String sql = "";
+		
+		if ("WALMART.CA".equalsIgnoreCase(custno.trim())){
+			sql = "SELECT comment comment " +
+					"FROM bve_order_dtl " +
+					"WHERE order_no like '%" + number.trim() + "%' " +
+					"AND ord_sequence = 1";
+		}else{
+			sql = "SELECT a.addr_type addrtype, a.name name, a.bvaddr1 addr1, a.bvaddr2 addr2, a.bvcity city, a.ship_desc shipdesc, "
+				+ "a.bvprovstate prov, a.bvcountrycode country, a.bvpostalcode postalcode, a.bvcocontact1name cname, "
+				+ "a.bvaddrtelno1 tel1, a.bvaddrtelno2 tel2, a.bvaddremail email "
+				+ "FROM order_address a "
+				+ "WHERE a.cev_no = '" + number.trim() + "' "
+				+ "AND a.addr_type = 'S'";
+		}
 
 		Statement stmt = getConn().createStatement();
 		ResultSet rs = stmt.executeQuery(sql);
 
 		com.order.src.objects.ShipTo shipTo = new com.order.src.objects.ShipTo();
-		while (rs.next()){
-			shipTo.setAddress1(rs.getString("addr1"));
-			shipTo.setAddress2(rs.getString("addr2"));
-			shipTo.setCity(rs.getString("city"));
-			shipTo.setCode(rs.getString("addrtype"));
-			shipTo.setContact(rs.getString("cname"));
-			shipTo.setCountry(rs.getString("country"));
-			shipTo.setEmail(rs.getString("email"));
-			shipTo.setFax(rs.getString("tel2"));
-			shipTo.setName(rs.getString("name"));
-			shipTo.setPhone(rs.getString("tel1"));
-			shipTo.setPostal(rs.getString("postalcode"));
-			shipTo.setProvince(rs.getString("prov"));
+		String shipToString = "";
+		if ("WALMART.CA".equalsIgnoreCase(custno.trim())){
+			shipToString = rs.getString("comment");
+		}else{
+			while (rs.next()){
+				shipTo.setAddress1(rs.getString("addr1"));
+				shipTo.setAddress2(rs.getString("addr2"));
+				shipTo.setCity(rs.getString("city"));
+				shipTo.setCode(rs.getString("addrtype"));
+				shipTo.setContact(rs.getString("cname"));
+				shipTo.setCountry(rs.getString("country"));
+				shipTo.setEmail(rs.getString("email"));
+				shipTo.setFax(rs.getString("tel2"));
+				shipTo.setName(rs.getString("name"));
+				shipTo.setPhone(rs.getString("tel1"));
+				shipTo.setPostal(rs.getString("postalcode"));
+				shipTo.setProvince(rs.getString("prov"));
+			}
 		}
 		
-
+		if ("WALMART.CA".equalsIgnoreCase(custno.trim())){
+			String[] shipToArray = shipToString.split(","); 
+			//TODO Populate shipTo object
+		}
 
 		return shipTo;
 	}
 	
 	/*
 		--WALMART ADDRESS QUERY
-		SELECT order_no number, ord_sequence recno, ord_part_no item, ord_description description, 
-		bvcmtdqty qty, comment comment, ord_part_whse warehouse 
+		SELECT comment 
 		FROM bve_order_dtl
-		WHERE 1=1 
-		AND order_no like '%00042239-0%'
-		AND recno = 1;
+		WHERE order_no like '%00043183-0%'
+		AND ord_sequence = 1;
+		//<Contact>,<Address1>,<Address2>,<City>,<Province>,<Postal Code>,<Country>
+		//Peter Sabiri,1774 Plainridge Cres,,ORL?ANS,ON,K4A 0L9,CA
+		//Kurt Nodwell,box 430,4656 district rd 169,Port Carling,ON,P0B 1J0,CA
 		
 		--WALMART DETAILS QUERY
 		SELECT order_no number, ord_sequence recno, ord_part_no item, ord_description description, 
