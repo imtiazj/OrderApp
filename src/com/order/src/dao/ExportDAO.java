@@ -45,7 +45,7 @@ public class ExportDAO {
 				+ "FROM bve_order h "
 				+ "WHERE h.order_no in (select distinct order_no from bve_order_dtl WHERE bvcmtdqty > 0) "
 						+ "AND h.ord_status = 'C' "
-						//+ "AND (h.ord_status = 'C' OR h.cust_no = 'WALMART.CA') "						//this line gets any walmart data... remove this once the data is okay
+//						+ "AND (h.ord_status = 'C' OR h.cust_no = 'WALMART.CA') "						//this line gets any walmart data... remove this once the data is okay
 				+ "ORDER BY h.order_no";
 		Statement stmt = getConn2().createStatement();
 		ResultSet rs = stmt.executeQuery(sql);
@@ -59,7 +59,7 @@ public class ExportDAO {
 			header.setContact("");
 			header.setInvoice("");
 			header.setNumber(rs.getString("custno"));	//ref_no
-			if ("WALMART.CA".equalsIgnoreCase(header.getNumber())){
+			if ("WALMART.CA".equalsIgnoreCase(header.getNumber().trim())){
 				header.setPoNo(rs.getString("walmartcustpono"));	//po_no for walmart in the ref_no column
 			}else{
 				header.setPoNo(rs.getString("custpono"));   //po_no for everybody else in cust_po_no column
