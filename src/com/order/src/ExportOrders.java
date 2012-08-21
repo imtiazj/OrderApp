@@ -103,7 +103,7 @@ public class ExportOrders {
 				xHeader.setInvoice(header.getInvoice());
 			}
 
-			com.order.src.objects.SoldTo headerSoldTo = getSoldTo(header.getNo());
+			com.order.src.objects.SoldTo headerSoldTo = getSoldTo(header.getNo(), header.getNumber());
 			// SoldTo Element
 			if (headerSoldTo != null) {
 				Soldto soldTo = xHeader.addNewSoldto();
@@ -147,7 +147,7 @@ public class ExportOrders {
 				}
 			}
 			
-			com.order.src.objects.ShipTo headerShipTo = getShipTo(header.getNo(), header.getNumber());
+			com.order.src.objects.ShipTo headerShipTo = getShipTo(header.getNo());
 			// SoldTo Element
 			if (headerShipTo != null) {
 				Shipto shipTo = xHeader.addNewShipto();
@@ -349,12 +349,12 @@ public class ExportOrders {
 
 	}
 
-	private com.order.src.objects.SoldTo getSoldTo(String number){
+	private com.order.src.objects.SoldTo getSoldTo(String number, String custno){
 		ExportDAO dao = new ExportDAO(database, database2);
 		com.order.src.objects.SoldTo soldTo;
 
 		try {
-			soldTo = dao.getSoldToInformation(number);
+			soldTo = dao.getSoldToInformation(number, custno);
 			return soldTo;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -364,12 +364,12 @@ public class ExportOrders {
 		
 	}
 	
-	private com.order.src.objects.ShipTo getShipTo(String number, String custno){
+	private com.order.src.objects.ShipTo getShipTo(String number){
 		ExportDAO dao = new ExportDAO(database, database2);
 		com.order.src.objects.ShipTo shipTo;
 
 		try {
-			shipTo = dao.getShipToInformation(number, custno);
+			shipTo = dao.getShipToInformation(number);
 			return shipTo;
 		} catch (SQLException e) {
 			e.printStackTrace();

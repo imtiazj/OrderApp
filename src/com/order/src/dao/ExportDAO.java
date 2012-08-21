@@ -113,47 +113,7 @@ public class ExportDAO {
 	}
 	
 	// gets sold to information from the atlantia database
-	public com.order.src.objects.SoldTo getSoldToInformation(String number) throws SQLException {
-		String sql = "SELECT a.addr_type addrtype, a.name name, a.bvaddr1 addr1, a.bvaddr2 addr2, a.bvcity city, a.ship_desc shipdesc, "
-			+ "a.bvprovstate prov, a.bvcountrycode country, a.bvpostalcode postalcode, a.bvcocontact1name cname, "
-			+ "a.bvaddrtelno1 tel1, a.bvaddrtelno2 tel2, a.bvaddremail email "
-			+ "FROM order_address a "
-			+ "WHERE a.cev_no = '" + number.trim() + "' "
-			+ "AND a.addr_type = 'B'";
-
-		Statement stmt = getConn().createStatement();
-		ResultSet rs = stmt.executeQuery(sql);
-
-		SoldTo soldTo = new SoldTo();
-		while (rs.next()){
-			soldTo.setAddress1(rs.getString("addr1"));
-			soldTo.setAddress2(rs.getString("addr2"));
-			soldTo.setCity(rs.getString("city"));
-			soldTo.setCode(rs.getString("addrtype"));
-			soldTo.setContact(rs.getString("cname"));
-			soldTo.setCountry(rs.getString("country"));
-			soldTo.setEmail(rs.getString("email"));
-			soldTo.setFax(rs.getString("tel2"));
-			soldTo.setName(rs.getString("name"));
-			soldTo.setPhone(rs.getString("tel1"));
-			soldTo.setPostal(rs.getString("postalcode"));
-			soldTo.setProvince(rs.getString("prov"));
-		}
-		
-
-
-		return soldTo;
-	}
-
-	// gets shipto to information from the atlantia database
-	/**
-	 * 
-	 * @param number (h.order_no number, number in xml) 
-	 * @param custno (h.cust_no custno, ref_no in xml)
-	 * @return
-	 * @throws SQLException
-	 */
-	public com.order.src.objects.ShipTo getShipToInformation(String number, String custno) throws SQLException {
+	public com.order.src.objects.SoldTo getSoldToInformation(String number, String custno) throws SQLException {
 		String sql = "";
 		
 		if ("WALMART.CA".equalsIgnoreCase(custno.trim())){
@@ -167,9 +127,9 @@ public class ExportDAO {
 				+ "a.bvaddrtelno1 tel1, a.bvaddrtelno2 tel2, a.bvaddremail email "
 				+ "FROM order_address a "
 				+ "WHERE a.cev_no = '" + number.trim() + "' "
-				+ "AND a.addr_type = 'S'";
+				+ "AND a.addr_type = 'B'";
 		}
-
+		
 		Statement stmt = null;
 		if ("WALMART.CA".equalsIgnoreCase(custno.trim())){
 			stmt = getConn2().createStatement();
@@ -178,96 +138,107 @@ public class ExportDAO {
 		}
 		ResultSet rs = stmt.executeQuery(sql);
 
-		com.order.src.objects.ShipTo shipTo = new com.order.src.objects.ShipTo();
-		String shipToString = "";
+		SoldTo soldTo = new SoldTo();
+		String soldToString = "";
 		if ("WALMART.CA".equalsIgnoreCase(custno.trim())){
 			while (rs.next()){
-				shipToString = rs.getString("comment");
+				soldToString = rs.getString("comment");
 			}
 		}else{
 			while (rs.next()){
-				shipTo.setAddress1(rs.getString("addr1"));
-				shipTo.setAddress2(rs.getString("addr2"));
-				shipTo.setCity(rs.getString("city"));
-				shipTo.setCode(rs.getString("addrtype"));
-				shipTo.setContact(rs.getString("cname"));
-				shipTo.setCountry(rs.getString("country"));
-				shipTo.setEmail(rs.getString("email"));
-				shipTo.setFax(rs.getString("tel2"));
-				shipTo.setName(rs.getString("name"));
-				shipTo.setPhone(rs.getString("tel1"));
-				shipTo.setPostal(rs.getString("postalcode"));
-				shipTo.setProvince(rs.getString("prov"));
+				soldTo.setAddress1(rs.getString("addr1"));
+				soldTo.setAddress2(rs.getString("addr2"));
+				soldTo.setCity(rs.getString("city"));
+				soldTo.setCode(rs.getString("addrtype"));
+				soldTo.setContact(rs.getString("cname"));
+				soldTo.setCountry(rs.getString("country"));
+				soldTo.setEmail(rs.getString("email"));
+				soldTo.setFax(rs.getString("tel2"));
+				soldTo.setName(rs.getString("name"));
+				soldTo.setPhone(rs.getString("tel1"));
+				soldTo.setPostal(rs.getString("postalcode"));
+				soldTo.setProvince(rs.getString("prov"));
 			}
 		}
 		
 		if ("WALMART.CA".equalsIgnoreCase(custno.trim())){
-			String[] shipToArray = shipToString.split(","); 
-			shipTo.setName(" ");
-			shipTo.setAddress1(" ");
-			shipTo.setAddress2(" ");
-			shipTo.setCity(" ");
-			shipTo.setProvince(" ");
-			shipTo.setPostal(" ");
-			shipTo.setCountry(" ");
+			String[] soldToArray = soldToString.split(","); 
+			soldTo.setName(" ");
+			soldTo.setAddress1(" ");
+			soldTo.setAddress2(" ");
+			soldTo.setCity(" ");
+			soldTo.setProvince(" ");
+			soldTo.setPostal(" ");
+			soldTo.setCountry(" ");
 			
 			//   0          1           2        3       4            5           6
 			//<Contact>,<Address1>,<Address2>,<City>,<Province>,<Postal Code>,<Country>
-			if (shipToArray.length > 0){
-				shipTo.setName(shipToArray[0]);	
+			if (soldToArray.length > 0){
+				soldTo.setName(soldToArray[0]);	
 			}			
-			if (shipToArray.length > 1){
-				shipTo.setAddress1(shipToArray[1]);
+			if (soldToArray.length > 1){
+				soldTo.setAddress1(soldToArray[1]);
 			}
-			if (shipToArray.length > 2){
-				shipTo.setAddress2(shipToArray[2]);
+			if (soldToArray.length > 2){
+				soldTo.setAddress2(soldToArray[2]);
 			}
-			if (shipToArray.length > 3){
-				shipTo.setCity(shipToArray[3]);
+			if (soldToArray.length > 3){
+				soldTo.setCity(soldToArray[3]);
 			}
-			if (shipToArray.length > 4){
-				shipTo.setProvince(shipToArray[4]);
+			if (soldToArray.length > 4){
+				soldTo.setProvince(soldToArray[4]);
 			}
-			if (shipToArray.length > 5){
-				shipTo.setPostal(shipToArray[5]);
+			if (soldToArray.length > 5){
+				soldTo.setPostal(soldToArray[5]);
 			}
-			if (shipToArray.length > 6){
-				if ("CA".equals(shipToArray[6])){
-					shipTo.setCountry("CDN");
+			if (soldToArray.length > 6){
+				if ("CA".equals(soldToArray[6])){
+					soldTo.setCountry("CDN");
 				}else{
-					shipTo.setCountry(shipToArray[6]);
+					soldTo.setCountry(soldToArray[6]);
 				}
 			}
-			shipTo.setCode("S");		//address type 'S' for ship
-			shipTo.setContact(" ");		//blank, not provided
-			shipTo.setEmail(" ");		//blank, not provided
-			shipTo.setFax(" ");			//blank, not provided
-			shipTo.setPhone(" ");		//blank, not provided
+			soldTo.setCode("B");		//address type 'B' for Bill
+			soldTo.setContact(" ");		//blank, not provided
+			soldTo.setEmail(" ");		//blank, not provided
+			soldTo.setFax(" ");			//blank, not provided
+			soldTo.setPhone(" ");		//blank, not provided
 			
 			
 		}
 
+		return soldTo;
+	}
+
+	// gets shipto to information from the atlantia database
+	public com.order.src.objects.ShipTo getShipToInformation(String number) throws SQLException {
+		String sql = "SELECT a.addr_type addrtype, a.name name, a.bvaddr1 addr1, a.bvaddr2 addr2, a.bvcity city, a.ship_desc shipdesc, "
+			+ "a.bvprovstate prov, a.bvcountrycode country, a.bvpostalcode postalcode, a.bvcocontact1name cname, "
+			+ "a.bvaddrtelno1 tel1, a.bvaddrtelno2 tel2, a.bvaddremail email "
+			+ "FROM order_address a "
+			+ "WHERE a.cev_no = '" + number.trim() + "' "
+			+ "AND a.addr_type = 'S'";
+
+		Statement stmt = getConn().createStatement();
+		ResultSet rs = stmt.executeQuery(sql);
+
+		com.order.src.objects.ShipTo shipTo = new com.order.src.objects.ShipTo();
+		while (rs.next()){
+			shipTo.setAddress1(rs.getString("addr1"));
+			shipTo.setAddress2(rs.getString("addr2"));
+			shipTo.setCity(rs.getString("city"));
+			shipTo.setCode(rs.getString("addrtype"));
+			shipTo.setContact(rs.getString("cname"));
+			shipTo.setCountry(rs.getString("country"));
+			shipTo.setEmail(rs.getString("email"));
+			shipTo.setFax(rs.getString("tel2"));
+			shipTo.setName(rs.getString("name"));
+			shipTo.setPhone(rs.getString("tel1"));
+			shipTo.setPostal(rs.getString("postalcode"));
+			shipTo.setProvince(rs.getString("prov"));
+		}
+
 		return shipTo;
 	}
-	
-	/*
-		--WALMART ADDRESS QUERY
-		SELECT comment 
-		FROM bve_order_dtl
-		WHERE order_no like '%00043183-0%'
-		AND ord_sequence = 1;
-		//<Contact>,<Address1>,<Address2>,<City>,<Province>,<Postal Code>,<Country>
-		//Peter Sabiri,1774 Plainridge Cres,,ORL?ANS,ON,K4A 0L9,CA
-		//Kurt Nodwell,box 430,4656 district rd 169,Port Carling,ON,P0B 1J0,CA
-		
-		--WALMART DETAILS QUERY
-		SELECT order_no number, ord_sequence recno, ord_part_no item, ord_description description, 
-		bvcmtdqty qty, comment comment, ord_part_whse warehouse 
-		FROM bve_order_dtl 
-		WHERE 1=1 
-		AND ord_part_no <> '' 
-		AND bvcmtdqty > 0
-		AND recno <> 1
-		AND order_no like '%00042239-0%';
-	*/
+
 }
