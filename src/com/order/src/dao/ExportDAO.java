@@ -39,7 +39,9 @@ public class ExportDAO {
 
 	// gets header infomation from the new bve database
 	public Vector<Header> getHeaderInformation() throws SQLException {
-		String sql = "SELECT h.order_no number, h.cust_no custno, h.cust_po_no custpono "
+		String sql = "";
+		
+		sql = "SELECT h.order_no number, h.cust_no custno, h.cust_po_no custpono, h.ref_no walmartcustpono "
 				+ "FROM bve_order h "
 				+ "WHERE h.order_no in (select distinct order_no from bve_order_dtl WHERE bvcmtdqty > 0) "
 						+ "AND h.ord_status = 'C' "
@@ -57,7 +59,11 @@ public class ExportDAO {
 			header.setContact("");
 			header.setInvoice("");
 			header.setNumber(rs.getString("custno"));	//ref_no
-			header.setPoNo(rs.getString("custpono"));
+			if ("WALMART.CA".equalsIgnoreCase(header.getNumber())){
+				header.setPoNo(rs.getString("walmartcustpono"));	//po_no for walmart in the ref_no column
+			}else{
+				header.setPoNo(rs.getString("custpono"));   //po_no for everybody else in cust_po_no column
+			}
 			header.setRefNo("");
 			header.setService("");
 			header.setShipVia("");
