@@ -77,6 +77,9 @@ public class ExportOrders {
 			noNamespace.OrdersDocument.Orders.Order.Header xHeader = order.addNewHeader();
 			if (!header.getNo().equalsIgnoreCase("")) { //$NON-NLS-1$
 				xHeader.setNumber(header.getNo());
+				if ("WALMART.CA".equalsIgnoreCase(header.getNumber().trim())){
+					xHeader.setNumber(header.getRefNo());
+				}				
 			}
 			if (!header.getNumber().equalsIgnoreCase("")) { //$NON-NLS-1$
 				xHeader.setRefNo(header.getNumber());
