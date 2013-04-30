@@ -73,8 +73,10 @@ public class ExportDAO {
 	
 	private String getComments(String number) throws SQLException {
 		String comment = "";
+		//n_data = detail n_key = item n_date n_time
 		
-		String sql = "SELECT n_data comment FROM bve_notes where n_key = '" + number.trim() + "' order by bvrvadddate, bvrvaddtime";
+//		String sql = "SELECT n_data comment FROM bve_notes where n_key = '" + number.trim() + "' order by bvrvadddate, bvrvaddtime";
+		String sql = "SELECT detail comment FROM notes where item = '" + number.trim() + "' order by n_date, n_time";
 			
 		Statement stmt = getConn2().createStatement();
 		ResultSet rs = stmt.executeQuery(sql);
@@ -138,6 +140,8 @@ public class ExportDAO {
 		}else{
 			stmt = getConn().createStatement();
 		}
+		
+//		System.out.println("Executing : " + sql);
 		ResultSet rs = stmt.executeQuery(sql);
 
 		SoldTo soldTo = new SoldTo();
